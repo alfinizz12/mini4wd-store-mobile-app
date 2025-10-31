@@ -3,6 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:mini4wd_store/controller/auth_controller.dart';
 import 'package:mini4wd_store/controller/currency_controller.dart';
+import 'package:mini4wd_store/controller/location_controller.dart';
+import 'package:mini4wd_store/controller/store_controller.dart';
 import 'package:mini4wd_store/controller/timezone_controller.dart';
 import 'package:mini4wd_store/service/session_service.dart';
 import 'package:mini4wd_store/ui/style/colors.dart';
@@ -19,9 +21,11 @@ void main() async {
     anonKey: dotenv.get("SUPABASE_ANON_KEY").toString(),
   );
 
-  // initialize Time Zone Controller
+  // initialize some controllers
   Get.put(TimezoneController());
   Get.put(CurrencyController());
+  Get.put(LocationController());
+  Get.put(StoreController());
 
   runApp(const MainApp());
 }

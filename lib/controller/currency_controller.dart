@@ -17,9 +17,7 @@ class CurrencyController extends GetxController {
     'EUR': '€',
   };
 
-  final List<String> availableCurrencies = [
-    'IDR', 'USD', 'JPY', 'KRW', 'EUR'
-  ];
+  final List<String> availableCurrencies = ['IDR', 'USD', 'JPY', 'KRW', 'EUR'];
 
   @override
   void onInit() {
@@ -31,6 +29,7 @@ class CurrencyController extends GetxController {
     final savedCurrency = await _currencyService.getUserCurrency();
     if (savedCurrency.isNotEmpty) {
       toCurrency.value = savedCurrency;
+      currentCurrency.value = savedCurrency;
     }
   }
 
@@ -53,16 +52,16 @@ class CurrencyController extends GetxController {
   }
 
   String formatCurrency(double value) {
-  final symbol = symbols[toCurrency.value] ?? toCurrency.value;
+    final symbol = symbols[toCurrency.value] ?? toCurrency.value;
 
-  final settings = CurrencyFormat(
-    symbol: symbol,
-    symbolSide: SymbolSide.left,
-    thousandSeparator: '.',
-    decimalSeparator: ',',
-    symbolSeparator: ' ',
-  );
+    final settings = CurrencyFormat(
+      symbol: symbol,
+      symbolSide: SymbolSide.left,
+      thousandSeparator: '.',
+      decimalSeparator: ',',
+      symbolSeparator: ' ',
+    );
 
-  return CurrencyFormatter.format(value, settings);
-}
+    return CurrencyFormatter.format(value, settings);
+  }
 }

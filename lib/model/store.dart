@@ -9,11 +9,11 @@ class Store {
 
   factory Store.fromJson(Map<String, dynamic> json){
     return Store(
-      id: json['id'], 
-      name: json['id'], 
-      address: json['id'], 
-      latitude: json['id'], 
-      longitude: json['id']
+      id: int.parse(json['id']), 
+      name: json['name'], 
+      address: json['address'], 
+      latitude: json['latitude'], 
+      longitude: json['longitude']
     );
   }
 }

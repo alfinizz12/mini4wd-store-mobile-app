@@ -109,7 +109,9 @@ class _HomePageState extends State<HomePage> {
               return const Center(child: CircularProgressIndicator());
             }
 
-            return GridView.builder(
+
+
+            return _productController.filteredProducts.isEmpty ? Center(child: Text("No Product"),) : GridView.builder(
               itemCount: _productController.filteredProducts.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -117,13 +119,14 @@ class _HomePageState extends State<HomePage> {
               ),
               itemBuilder: (context, index) {
                 final product = _productController.filteredProducts[index];
+
                 return ProductCard(
                   product: product,
                   onTap: () => Get.to(() => DetailProduct(product: product)),
                   addToFavorite: () {
                     _productController.addToFavorite(
                       product,
-                      _authController.user.id,
+                      _authController.user!.id,
                     );
                   },
                 );

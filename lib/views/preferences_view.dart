@@ -70,7 +70,7 @@ class PreferencesView extends StatelessWidget {
                           .toList(),
                       onChanged: (value) {
                         if (value != null) {
-                          currencyController.setCurrency(from:currencyController.fromCurrency.value ,to: value);
+                          currencyController.setCurrency(from: currencyController.fromCurrency.value ,to: value);
                         }
                       },
                     ),

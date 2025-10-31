@@ -9,13 +9,13 @@ import '../model/user.dart';
 class AuthController extends GetxController {
   final _authService = AuthService();
   final _sessionService = SessionService();
-  User? _authUser;
-  User get user => _authUser!;
+  final Rxn<User> _authUser = Rxn<User>();
+  User? get user => _authUser.value;
 
   @override
-  void onInit() async {
-    await _getUser();
+  void onInit() {
     super.onInit();
+    getUser();
   }
 
   Future<void> login(String email, String password) async {
@@ -30,6 +30,8 @@ class AuthController extends GetxController {
       );
       return;
     }
+
+    await getUser(); // ambil ulang data user dari session
 
     Get.snackbar(
       "Success",
@@ -84,8 +86,12 @@ class AuthController extends GetxController {
         colorText: Colors.white,
         backgroundColor: Colors.red,
       );
+      return;
     }
+
     await _authService.logout();
+    _authUser.value = null;
+
     Get.offAll(() => LoginView());
     Get.snackbar(
       "Logout",
@@ -95,13 +101,13 @@ class AuthController extends GetxController {
     );
   }
 
-  Future<void> _getUser() async {
+  Future<void> getUser() async {
     final authenticatedUser = await _sessionService.loadSession();
-    if (authenticatedUser == null) {
-      _authUser = null;
-      return;
-    }
 
-    _authUser = User.fromMap(authenticatedUser);
+    if (authenticatedUser == null) {
+      _authUser.value = null;
+    } else {
+      _authUser.value = User.fromMap(authenticatedUser);
+    }
   }
 }

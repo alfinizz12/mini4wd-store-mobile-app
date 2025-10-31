@@ -21,6 +21,7 @@ dependencies:
   shared_preferences: ^2.5.3
   timezone: ^0.10.1
   live_currency_rate: ^1.0.8
+  geolocator: ^14.0.2
   
 
 dev_dependencies:
