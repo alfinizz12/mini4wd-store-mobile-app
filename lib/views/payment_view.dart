@@ -177,6 +177,8 @@ class PaymentView extends StatelessWidget {
               await Future.delayed(const Duration(seconds: 2));
               await orderController.updateOrderStatus(order['id'], "paid");
 
+              await orderController.getOrderHistory();
+
               Get.back();
               Get.snackbar(
                 "Berhasil",
