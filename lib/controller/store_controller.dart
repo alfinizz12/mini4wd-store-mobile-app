@@ -3,17 +3,24 @@ import 'package:get/get.dart';
 import 'package:mini4wd_store/controller/location_controller.dart';
 import 'package:mini4wd_store/model/store.dart';
 import 'package:mini4wd_store/service/api/store_api_service.dart';
+import 'package:mini4wd_store/service/notification_service.dart';
 
 class StoreController extends GetxController {
   final StoreApiService _storeService = StoreApiService();
+  final NotificationService _notificationService = NotificationService();
+  final LocationController _locationController = Get.find<LocationController>();
 
   final RxList<Store> stores = <Store>[].obs;
-  final LocationController _locationController = Get.find<LocationController>();
+
+  final List<int> _notifiedStoreIds = [];
 
   @override
   void onInit(){
-    getAllStores();
     super.onInit();
+    getAllStores();
+    _locationController.location.listen((pos) {
+      _checkNearbyStores();
+    });
   }
 
   Future<void> getAllStores() async {
@@ -33,5 +40,22 @@ class StoreController extends GetxController {
     );
 
     return distanceInMeters / 1000; // km
+  }
+
+  void _checkNearbyStores() {
+    final pos = _locationController.location.value;
+    if (pos == null) return;
+
+    for (var store in stores) {
+      double distance = getDistanceToStore(store.latitude, store.longitude);
+
+      if (distance <= 2 && !_notifiedStoreIds.contains(store.id)) {
+        _notificationService.showNotification(
+          title: "Toko Tamiya Terdekat",
+          body: "${store.name} berada dalam jarak ${distance.toStringAsFixed(2)} km dari Anda!",
+        );
+        _notifiedStoreIds.add(store.id); // agar tidak di-notifikasi ulang
+      }
+    }
   }
 }

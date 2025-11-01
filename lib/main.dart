@@ -8,6 +8,7 @@ import 'package:mini4wd_store/controller/location_controller.dart';
 import 'package:mini4wd_store/controller/store_controller.dart';
 import 'package:mini4wd_store/controller/timezone_controller.dart';
 import 'package:mini4wd_store/model/wishlist_product.dart';
+import 'package:mini4wd_store/service/notification_service.dart';
 import 'package:mini4wd_store/service/session_service.dart';
 import 'package:mini4wd_store/ui/style/colors.dart';
 import 'package:mini4wd_store/ui/theme/app_theme.dart';
@@ -17,6 +18,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().initNotification();
+
   await dotenv.load(fileName: ".env");
   await Supabase.initialize(
     url: dotenv.get('SUPABASE_URL').toString(),
@@ -70,7 +73,6 @@ class _MainAppState extends State<MainApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
       home:
           _startPage ??
           Scaffold(

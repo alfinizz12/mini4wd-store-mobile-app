@@ -37,7 +37,6 @@ class _ShopMapPageState extends State<ShopMapPage> {
 
             return LocationInfo(pos: pos, msg: msg);
           }),
-
           Expanded(
             child: Obx(() {
               if (_storeController.stores.isEmpty) {
@@ -52,9 +51,7 @@ class _ShopMapPageState extends State<ShopMapPage> {
                     storeController: _storeController,
                   );
                 },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: 10);
-                },
+                separatorBuilder: (context, index) => SizedBox(height: 10),
               );
             }),
           ),
@@ -63,5 +60,3 @@ class _ShopMapPageState extends State<ShopMapPage> {
     );
   }
 }
-
-

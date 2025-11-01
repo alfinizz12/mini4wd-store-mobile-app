@@ -12,7 +12,7 @@ class DetailProduct extends StatelessWidget {
   final RxInt items = 1.obs;
 
   void increment() {
-    if (items.value <= product.stock) {
+    if (items.value < product.stock) {
       items.value++;
     }
   }
@@ -53,6 +53,7 @@ class DetailProduct extends StatelessWidget {
                   }
                 );
               }),
+              Text("Stock : ${product.stock.toString()}"),
               SizedBox(height: 10),
               SingleChildScrollView(
                 child: Row(
@@ -109,7 +110,7 @@ class DetailProduct extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  Get.to(() => CheckoutView(
+                  Get.off(() => CheckoutView(
                       product: product, 
                       quantity: items.value,
                       total: product.price * items.value,

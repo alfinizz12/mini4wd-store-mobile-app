@@ -4,6 +4,7 @@ import 'package:mini4wd_store/controller/auth_controller.dart';
 import 'package:mini4wd_store/controller/order_controller.dart';
 import 'package:mini4wd_store/controller/currency_controller.dart';
 import 'package:mini4wd_store/model/product.dart';
+import 'package:mini4wd_store/service/notification_service.dart';
 import 'package:mini4wd_store/views/payment_view.dart';
 
 class CheckoutView extends StatefulWidget {
@@ -146,7 +147,6 @@ class _CheckoutViewState extends State<CheckoutView> {
           ),
         ),
       ),
-
       bottomNavigationBar: BottomAppBar(
         child: SizedBox(
           width: double.infinity,
@@ -180,12 +180,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                 return;
               }
 
-              Get.snackbar(
-                "Order Created",
-                "Directiong to payment screen...",
-                backgroundColor: Colors.green,
-                colorText: Colors.white,
-              );
+              NotificationService().showNotification(title: "Order Success", body: "Order ID : $orderId");
 
               Get.off(() => PaymentView(orderId: orderId));
             },
