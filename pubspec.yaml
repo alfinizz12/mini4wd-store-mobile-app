@@ -39,4 +39,5 @@ flutter:
   assets:
     - .env
     - assets/images/tamiya.png
+    - assets/images/alfin.jpeg
 

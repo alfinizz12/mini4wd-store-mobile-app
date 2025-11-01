@@ -37,13 +37,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(
+                    radius: MediaQuery.of(context).size.height * 0.05,
                     backgroundColor: Colors.amberAccent,
-                    radius: MediaQuery.of(context).size.height * 0.04,
-                    child: Text(
-                      user.username.substring(0, 1).toUpperCase(),
-                      style: const TextStyle(fontSize: 32),
-                    ),
+                    backgroundImage: AssetImage('assets/images/alfin.jpeg'),
                   ),
+
                   const SizedBox(width: 10),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -63,9 +61,9 @@ class _ProfilePageState extends State<ProfilePage> {
           }),
           const SizedBox(height: 20),
           ProfileMenu(
-            title: "Address", 
-            icon: Icons.format_list_numbered, 
-            onTap: () => Get.to(() => AddressView())
+            title: "Address",
+            icon: Icons.format_list_numbered,
+            onTap: () => Get.to(() => AddressView()),
           ),
           ProfileMenu(
             title: "Preferences",
