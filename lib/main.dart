@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:mini4wd_store/controller/auth_controller.dart';
@@ -6,6 +7,7 @@ import 'package:mini4wd_store/controller/currency_controller.dart';
 import 'package:mini4wd_store/controller/location_controller.dart';
 import 'package:mini4wd_store/controller/store_controller.dart';
 import 'package:mini4wd_store/controller/timezone_controller.dart';
+import 'package:mini4wd_store/model/wishlist_product.dart';
 import 'package:mini4wd_store/service/session_service.dart';
 import 'package:mini4wd_store/ui/style/colors.dart';
 import 'package:mini4wd_store/ui/theme/app_theme.dart';
@@ -20,6 +22,9 @@ void main() async {
     url: dotenv.get('SUPABASE_URL').toString(),
     anonKey: dotenv.get("SUPABASE_ANON_KEY").toString(),
   );
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(WishlistProductAdapter());
 
   // initialize some controllers
   Get.put(TimezoneController());

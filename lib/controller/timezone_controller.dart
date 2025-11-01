@@ -31,6 +31,18 @@ class TimezoneController extends GetxController {
   void _updateCurrentTime() {
     final location = _timezoneService.getLocation(currentTimezone.value);
     final now = tz.TZDateTime.now(location);
-    currentTime.value = "${now.day}-${now.month}-${now.year}: ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";
+    currentTime.value =
+        "${now.day}-${now.month}-${now.year} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";
+  }
+
+  String convertToUserTimezone(String utcString) {
+    try {
+      final utcTime = DateTime.parse(utcString).toUtc();
+      final location = _timezoneService.getLocation(currentTimezone.value);
+      final localTime = tz.TZDateTime.from(utcTime, location);
+      return "${localTime.day}-${localTime.month}-${localTime.year} ${localTime.hour.toString().padLeft(2, '0')}:${localTime.minute.toString().padLeft(2, '0')}";
+    } catch (e) {
+      return utcString;
+    }
   }
 }

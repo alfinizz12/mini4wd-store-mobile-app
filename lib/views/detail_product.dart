@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mini4wd_store/controller/currency_controller.dart';
 import 'package:mini4wd_store/model/product.dart';
+import 'package:mini4wd_store/views/checkout_view.dart';
 
 class DetailProduct extends StatelessWidget {
   DetailProduct({super.key, required this.product});
   final Product product;
   final CurrencyController currencyController = Get.find<CurrencyController>();
 
-  final RxInt items = 0.obs;
+  final RxInt items = 1.obs;
 
   void increment() {
     if (items.value <= product.stock) {
@@ -17,7 +18,7 @@ class DetailProduct extends StatelessWidget {
   }
 
   void decrement() {
-    if (items.value != 0) {
+    if (items.value != 1) {
       items.value--;
     }
   }
@@ -107,7 +108,14 @@ class DetailProduct extends StatelessWidget {
             ),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {}, 
+                onPressed: () {
+                  Get.to(() => CheckoutView(
+                      product: product, 
+                      quantity: items.value,
+                      total: product.price * items.value,
+                    )
+                  );
+                }, 
                 child: Text("Order now")
               ),
             ),

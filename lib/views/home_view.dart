@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mini4wd_store/controller/wishlist_controller.dart';
 import 'package:mini4wd_store/views/pages/home_page.dart';
 import 'package:mini4wd_store/views/pages/profile_page.dart';
 import 'package:mini4wd_store/views/pages/shop_map_page.dart';
@@ -17,6 +19,12 @@ class _HomeViewState extends State<HomeView> {
     ShopMapPage(),
     ProfilePage()
   ];
+
+  @override
+  void initState(){
+    super.initState();
+    Get.put(WishlistController());
+  }
 
   @override
   Widget build(BuildContext context) {

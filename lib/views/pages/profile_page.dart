@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mini4wd_store/controller/auth_controller.dart';
 import 'package:mini4wd_store/ui/components/profile_menu.dart';
+import 'package:mini4wd_store/views/address_view.dart';
+import 'package:mini4wd_store/views/order_history_view.dart';
 import 'package:mini4wd_store/views/preferences_view.dart';
+import 'package:mini4wd_store/views/wishlist_view.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -46,8 +49,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(user.username,
-                          style: Theme.of(context).textTheme.headlineSmall),
+                      Text(
+                        user.username,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
                       const SizedBox(height: 10),
                       Text(user.email),
                     ],
@@ -58,13 +63,25 @@ class _ProfilePageState extends State<ProfilePage> {
           }),
           const SizedBox(height: 20),
           ProfileMenu(
-              title: "Preferences",
-              icon: Icons.settings,
-              onTap: () => Get.to(() => PreferencesView())),
+            title: "Address", 
+            icon: Icons.format_list_numbered, 
+            onTap: () => Get.to(() => AddressView())
+          ),
           ProfileMenu(
-              title: "Order History",
-              icon: Icons.history_outlined,
-              onTap: () {}),
+            title: "Preferences",
+            icon: Icons.settings,
+            onTap: () => Get.to(() => PreferencesView()),
+          ),
+          ProfileMenu(
+            title: "My Wishlist",
+            icon: Icons.favorite_border,
+            onTap: () => Get.to(() => WishlistView()),
+          ),
+          ProfileMenu(
+            title: "Order History",
+            icon: Icons.history_outlined,
+            onTap: () => Get.to(() => OrderHistoryView()),
+          ),
           ProfileMenu(
             title: "Log Out",
             icon: Icons.logout,
@@ -82,8 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     actions: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.error,
+                          backgroundColor: Theme.of(context).colorScheme.error,
                         ),
                         onPressed: () => Navigator.of(context).pop(),
                         child: const Text("Cancel"),
