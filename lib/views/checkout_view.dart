@@ -64,7 +64,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                       }
                       final convertedPrice = snapshot.data!;
                       return Text(
-                        "Harga: ${currencyController.formatCurrency(convertedPrice)}",
+                        "Price: ${currencyController.formatCurrency(convertedPrice)}",
                       );
                     },
                   );
@@ -75,7 +75,7 @@ class _CheckoutViewState extends State<CheckoutView> {
               const Divider(height: 30),
 
               Text(
-                "Pilih Alamat Pengiriman",
+                "Choose Shipping Address",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -84,7 +84,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                 final addresses = authController.address;
 
                 if (addresses.isEmpty) {
-                  return const Text("Belum ada alamat tersimpan.");
+                  return const Text("No saved address");
                 }
 
                 return DropdownButtonFormField<String>(
@@ -97,7 +97,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                       vertical: 8,
                     ),
                   ),
-                  hint: const Text("Pilih alamat pengiriman"),
+                  hint: const Text("Pick address"),
                   initialValue: selectedAddress.value.isEmpty
                       ? null
                       : selectedAddress.value,

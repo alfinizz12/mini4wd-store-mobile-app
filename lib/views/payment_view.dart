@@ -53,8 +53,8 @@ class PaymentView extends StatelessWidget {
                       const SizedBox(height: 12),
                       Text(
                         isPending
-                            ? "Menunggu Pembayaran..."
-                            : "Pembayaran Berhasil!",
+                            ? "Waiting payment..."
+                            : "Payment Success!",
                         style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -65,11 +65,11 @@ class PaymentView extends StatelessWidget {
                         subtitle: Text(order['id'].toString()),
                       ),
                       ListTile(
-                        title: const Text("Alamat"),
+                        title: const Text("Address"),
                         subtitle: Text(order['address']),
                       ),
                       ListTile(
-                        title: const Text("Jumlah"),
+                        title: const Text("Quantity"),
                         subtitle: Text("${order['quantity']} pcs"),
                       ),
                       ListTile(
@@ -96,7 +96,7 @@ class PaymentView extends StatelessWidget {
                         }),
                       ),
                       ListTile(
-                        title: const Text("Tanggal"),
+                        title: const Text("Order Date"),
                         subtitle: Text(createdAtFormatted),
                       ),
                       const SizedBox(height: 20),
@@ -106,7 +106,7 @@ class PaymentView extends StatelessWidget {
                             _showPaymentDialog(context, orderController, order);
                           },
                           icon: const Icon(Icons.payment),
-                          label: const Text("Bayar Sekarang"),
+                          label: const Text("Pay Now"),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blueAccent,
                             padding: const EdgeInsets.symmetric(
@@ -117,7 +117,7 @@ class PaymentView extends StatelessWidget {
                         ElevatedButton.icon(
                           onPressed: () => Get.back(),
                           icon: const Icon(Icons.home),
-                          label: const Text("Kembali ke Home"),
+                          label: const Text("Back to Home"),
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 24),
@@ -143,13 +143,14 @@ class PaymentView extends StatelessWidget {
     final TextEditingController nameController = TextEditingController();
 
     Get.defaultDialog(
+      contentPadding: EdgeInsets.all(10),
       title: "Simulasi Pembayaran",
       content: Column(
         children: [
           TextField(
             controller: cardNumberController,
             decoration: const InputDecoration(
-              labelText: "Nomor Kartu",
+              labelText: "Card Number",
               hintText: "1234 5678 9012 3456",
             ),
             keyboardType: TextInputType.number,
@@ -157,7 +158,7 @@ class PaymentView extends StatelessWidget {
           TextField(
             controller: nameController,
             decoration: const InputDecoration(
-              labelText: "Nama Pemilik Kartu",
+              labelText: "Card Owner Name",
             ),
           ),
           const SizedBox(height: 20),
@@ -181,14 +182,14 @@ class PaymentView extends StatelessWidget {
 
               Get.back();
               Get.snackbar(
-                "Berhasil",
-                "Pembayaran selesai untuk Order #${order['id']}",
+                "Success",
+                "Payment Success for Order ID : #${order['id']}",
                 snackPosition: SnackPosition.BOTTOM,
                 backgroundColor: Colors.green,
                 colorText: Colors.white,
               );
             },
-            child: const Text("Bayar Sekarang"),
+            child: const Text("Pay Now"),
           ),
         ],
       ),

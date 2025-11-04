@@ -12,12 +12,12 @@ class StoreController extends GetxController {
 
   final RxList<Store> stores = <Store>[].obs;
 
-  final List<int> _notifiedStoreIds = [];
-
   @override
-  void onInit(){
+  void onInit() {
     super.onInit();
     getAllStores();
+
+    // setiap kali lokasi berubah, cek toko terdekat
     _locationController.location.listen((pos) {
       _checkNearbyStores();
     });
@@ -26,6 +26,9 @@ class StoreController extends GetxController {
   Future<void> getAllStores() async {
     final result = await _storeService.getAllStore();
     stores.value = result;
+
+    // setelah data toko didapat, langsung cek toko terdekat
+    _checkNearbyStores();
   }
 
   double getDistanceToStore(double storeLat, double storeLng) {
@@ -44,18 +47,21 @@ class StoreController extends GetxController {
 
   void _checkNearbyStores() {
     final pos = _locationController.location.value;
-    if (pos == null) return;
+    if (pos == null || stores.isEmpty) return;
 
     for (var store in stores) {
       double distance = getDistanceToStore(store.latitude, store.longitude);
 
-      if (distance <= 2 && !_notifiedStoreIds.contains(store.id)) {
+      if (distance <= 2) {
         _notificationService.showNotification(
           title: "Toko Tamiya Terdekat",
-          body: "${store.name} berada dalam jarak ${distance.toStringAsFixed(2)} km dari Anda!",
+          body:
+              "${store.name} berada dalam jarak ${distance.toStringAsFixed(2)} km dari Anda!",
         );
-        _notifiedStoreIds.add(store.id); // agar tidak di-notifikasi ulang
       }
     }
   }
+
+  // fungsi publik jika ingin dipanggil manual
+  void checkNearbyStores() => _checkNearbyStores();
 }

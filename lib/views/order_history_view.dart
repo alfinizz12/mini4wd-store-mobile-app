@@ -26,7 +26,7 @@ class OrderHistoryView extends StatelessWidget {
         if (orderController.orders.isEmpty) {
           return const Center(
             child: Text(
-              "Belum ada order.",
+              "No order/transactions",
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           );
@@ -61,8 +61,8 @@ class OrderHistoryView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 4),
-                    Text("Alamat: ${order['address']}"),
-                    Text("Jumlah: ${order['quantity']} pcs"),
+                    Text("Address: ${order['address']}"),
+                    Text("Quantity: ${order['quantity']} pcs"),
                     FutureBuilder<double>(
                       future: currencyController
                           .convert(order['total'].toDouble()),
@@ -88,7 +88,7 @@ class OrderHistoryView extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Tanggal: $formattedDate",
+                      "Order date: $formattedDate",
                       style:
                           const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
