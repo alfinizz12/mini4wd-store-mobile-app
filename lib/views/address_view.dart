@@ -21,24 +21,48 @@ class _AddressViewState extends State<AddressView> {
     _authController.getUserAddress();
   }
 
+  Future<void> _refreshAddresses() async {
+    await _authController.getUserAddress();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Addresses")),
+      appBar: AppBar(title: const Text("Addresses")),
       body: Padding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Obx(() {
           if (_authController.address.isEmpty) {
-            return Center(child: Text("No address added"));
+            return const Center(child: Text("No address added"));
           }
 
-          return ListView.separated(
-            itemCount: _authController.address.length,
-            itemBuilder: (context, index) => ListTile(
-              leading: Icon(Icons.location_on_outlined),
-              title: Text(_authController.address[index]),
+          return RefreshIndicator(
+            onRefresh: _refreshAddresses,
+            child: ListView.separated(
+              itemCount: _authController.address.length,
+              itemBuilder: (context, index) {
+                final address = _authController.address[index];
+
+                return ListTile(
+                  leading: const Icon(Icons.location_on_outlined),
+                  title: Text(address['name'] ?? '-'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.redAccent),
+                    onPressed: () async {
+                      await _authController.deleteAddress(address['id']);
+                      Get.snackbar(
+                        "Deleted",
+                        "Address has been removed",
+                        backgroundColor: Colors.green,
+                        colorText: Colors.white,
+                      );
+                    },
+                  ),
+                );
+              },
+
+              separatorBuilder: (context, index) => const SizedBox(height: 5),
             ),
-            separatorBuilder: (context, index) => SizedBox(height: 5),
           );
         }),
       ),
@@ -48,7 +72,7 @@ class _AddressViewState extends State<AddressView> {
             context: context,
             builder: (context) {
               return Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 height: MediaQuery.of(context).size.height * 0.7,
                 child: Column(
                   children: [
@@ -56,15 +80,23 @@ class _AddressViewState extends State<AddressView> {
                       "Add address",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       controller: _addressController,
-                      decoration: InputDecoration(hint: Text("Your address")),
+                      decoration: const InputDecoration(
+                        hintText: "Your address",
+                      ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () async {
                         if (_addressController.text.isEmpty) {
+                          Get.snackbar(
+                            "Error",
+                            "Address cannot be empty",
+                            backgroundColor: Colors.redAccent,
+                            colorText: Colors.white,
+                          );
                           return;
                         }
 
@@ -72,9 +104,11 @@ class _AddressViewState extends State<AddressView> {
                           _addressController.text,
                           _authController.user!.id,
                         );
+                        _addressController.clear();
                         Get.back();
+                        await _refreshAddresses();
                       },
-                      child: Text("Add address"),
+                      child: const Text("Add address"),
                     ),
                   ],
                 ),
@@ -82,7 +116,7 @@ class _AddressViewState extends State<AddressView> {
             },
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

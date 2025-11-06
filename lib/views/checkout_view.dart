@@ -27,7 +27,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   final AuthController authController = Get.find<AuthController>();
   final OrderController orderController = Get.put(OrderController());
   final CurrencyController currencyController = Get.find<CurrencyController>();
-  final RxString selectedAddress = ''.obs;
+  final RxString selectedAddressId = ''.obs;
 
   @override
   void initState() {
@@ -98,24 +98,25 @@ class _CheckoutViewState extends State<CheckoutView> {
                     ),
                   ),
                   hint: const Text("Pick address"),
-                  initialValue: selectedAddress.value.isEmpty
+                  value: selectedAddressId.value.isEmpty
                       ? null
-                      : selectedAddress.value,
+                      : selectedAddressId.value,
                   items: addresses
                       .map(
                         (addr) => DropdownMenuItem<String>(
-                          value: addr,
-                          child: Text(addr),
+                          value: addr['id'].toString(),
+                          child: Text(addr['name'] ?? '-'),
                         ),
                       )
                       .toList(),
                   onChanged: (value) {
-                    if (value != null) selectedAddress.value = value;
+                    if (value != null) selectedAddressId.value = value;
                   },
                 );
               }),
 
               const SizedBox(height: 25),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -152,35 +153,44 @@ class _CheckoutViewState extends State<CheckoutView> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () async {
-              if (selectedAddress.value.isEmpty) {
+              if (selectedAddressId.value.isEmpty) {
                 Get.snackbar(
-                  "Alamat belum dipilih",
-                  "Silakan pilih alamat pengiriman terlebih dahulu",
+                  "Address not selected",
+                  "Please choose a shipping address first",
                   backgroundColor: Colors.orange,
                   colorText: Colors.white,
                 );
                 return;
               }
 
+              // Cari data address yang dipilih
+              final selected = authController.address.firstWhere(
+                (a) => a['id'].toString() == selectedAddressId.value,
+              );
+              final selectedAddressName = selected['name'] ?? '-';
+
               final orderId = await orderController.makeUserOrder(
                 authController.user!.id,
                 widget.product.id,
-                selectedAddress.value,
+                selectedAddressName,
                 widget.quantity,
                 widget.total,
               );
 
               if (orderId == null) {
                 Get.snackbar(
-                  "Gagal",
-                  "Terjadi kesalahan saat membuat order",
+                  "Failed",
+                  "An error occurred while creating order",
                   backgroundColor: Colors.red,
                   colorText: Colors.white,
                 );
                 return;
               }
 
-              NotificationService().showNotification(title: "Order Success", body: "Order ID : $orderId");
+              NotificationService().showNotification(
+                title: "Order Success",
+                body: "Order ID : $orderId",
+              );
 
               Get.off(() => PaymentView(orderId: orderId));
             },

@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mini4wd_store/controller/location_controller.dart';
 import 'package:mini4wd_store/service/auth_service.dart';
 import 'package:mini4wd_store/service/session_service.dart';
 import 'package:mini4wd_store/service/user_service.dart';
 import 'package:mini4wd_store/views/home_view.dart';
 import 'package:mini4wd_store/views/login_view.dart';
-import 'package:mini4wd_store/controller/wishlist_controller.dart'; // ⬅️ tambahkan import ini
+import 'package:mini4wd_store/controller/wishlist_controller.dart';
 import '../model/user.dart';
 
 class AuthController extends GetxController {
   final _authService = AuthService();
   final _sessionService = SessionService();
   final _userService = UserService();
+  final locationController = Get.find<LocationController>();
 
   final Rxn<User> _authUser = Rxn<User>();
   User? get user => _authUser.value;
 
-  final RxList<String> _userAddresses = <String>[].obs;
-  List<String> get address => _userAddresses;
+  final RxList<Map<String, dynamic>> _userAddresses =
+      <Map<String, dynamic>>[].obs;
+  List<Map<String, dynamic>> get address => _userAddresses;
 
   @override
   void onInit() {
@@ -42,6 +45,7 @@ class AuthController extends GetxController {
 
     final favController = Get.find<WishlistController>();
     favController.reloadForCurrentUser();
+    Get.put(LocationController());
 
     Get.snackbar(
       "Success",
@@ -105,6 +109,7 @@ class AuthController extends GetxController {
 
     final favController = Get.find<WishlistController>();
     favController.reloadForCurrentUser();
+    locationController.stopLocationStream();
 
     Get.offAll(() => LoginView());
     Get.snackbar(
@@ -130,12 +135,11 @@ class AuthController extends GetxController {
 
   Future<void> getUserAddress() async {
     final response = await _userService.getAddress(user!.id);
+    _userAddresses.assignAll(response);
+  }
 
-    final List<String> names = response
-        .map((e) => e['name']?.toString() ?? '')
-        .where((name) => name.isNotEmpty)
-        .toList();
-
-    _userAddresses.assignAll(names);
+  Future<void> deleteAddress(int id) async {
+    await _userService.deleteAddress(id);
+    await getUserAddress();
   }
 }

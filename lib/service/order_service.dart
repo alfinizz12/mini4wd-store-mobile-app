@@ -22,13 +22,17 @@ class OrderService {
       "total": total,
     }).select();
 
-    final product = await supabase.from("products").select().eq("id", productId).single();
-    await supabase.from("products").update({
-      "stock": product['stock'] - quantity
-    }).eq("id", productId);
+    final product = await supabase
+        .from("products")
+        .select()
+        .eq("id", productId)
+        .single();
+    await supabase
+        .from("products")
+        .update({"stock": product['stock'] - quantity})
+        .eq("id", productId);
 
     productController.getProducts();
-
 
     if (response.isNotEmpty) {
       return response[0]['id'].toString(); // kirim ID pesanan
@@ -40,7 +44,7 @@ class OrderService {
     final response = await supabase
         .from("orders")
         .select(
-          "*, products(name, image, price)",
+          "*, products(name)",
         ) // jika ada relasi ke tabel produk
         .eq("userId", userId)
         .order("created_at", ascending: false);
@@ -49,9 +53,13 @@ class OrderService {
   }
 
   Future<Map<String, dynamic>> getDetailOrder(String orderId) async {
-    final response = await supabase.from("orders").select().eq("id", orderId);
+    final response = await supabase
+        .from("orders")
+        .select("*, products(name)")
+        .eq("id", orderId)
+        .maybeSingle();
 
-    return response[0];
+    return response ?? {};
   }
 
   Future<void> updateOrderStatus(String orderId, String status) async {

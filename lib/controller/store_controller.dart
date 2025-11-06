@@ -26,8 +26,6 @@ class StoreController extends GetxController {
   Future<void> getAllStores() async {
     final result = await _storeService.getAllStore();
     stores.value = result;
-
-    // setelah data toko didapat, langsung cek toko terdekat
     _checkNearbyStores();
   }
 
@@ -42,7 +40,7 @@ class StoreController extends GetxController {
       storeLng,
     );
 
-    return distanceInMeters / 1000; // km
+    return distanceInMeters / 1000;
   }
 
   void _checkNearbyStores() {
@@ -61,7 +59,5 @@ class StoreController extends GetxController {
       }
     }
   }
-
-  // fungsi publik jika ingin dipanggil manual
   void checkNearbyStores() => _checkNearbyStores();
 }

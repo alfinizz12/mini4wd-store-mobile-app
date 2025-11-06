@@ -35,7 +35,7 @@ class OrderController extends GetxController {
 
     final response = await _orderService.supabase
         .from("orders")
-        .select()
+        .select("*, product:productId(name)")
         .eq("userId", userId)
         .order("created_at", ascending: false);
 
@@ -47,7 +47,7 @@ class OrderController extends GetxController {
     final response = await _orderService.getDetailOrder(orderId);
 
     if (response.isNotEmpty) {
-      orderDetail.value = response; 
+      orderDetail.value = response;
     }
 
     return response;

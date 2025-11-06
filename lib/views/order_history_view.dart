@@ -41,6 +41,9 @@ class OrderHistoryView extends StatelessWidget {
             final formattedDate =
                 timezoneController.convertToUserTimezone(order['created_at'] ?? '');
 
+            // Ambil nama produk (kalau ada)
+            final productName = order['product']?['name'] ?? 'Unknown Product';
+
             return Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -61,6 +64,15 @@ class OrderHistoryView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 4),
+                    // 🟢 Tambahan: tampilkan nama produk
+                    Text(
+                      "Product: $productName",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
                     Text("Address: ${order['address']}"),
                     Text("Quantity: ${order['quantity']} pcs"),
                     FutureBuilder<double>(
@@ -77,7 +89,6 @@ class OrderHistoryView extends StatelessWidget {
                         );
                       },
                     ),
-
                     Text(
                       "Status: ${order['status']}",
                       style: TextStyle(
@@ -89,8 +100,7 @@ class OrderHistoryView extends StatelessWidget {
                     ),
                     Text(
                       "Order date: $formattedDate",
-                      style:
-                          const TextStyle(fontSize: 12, color: Colors.grey),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ],
                 ),
