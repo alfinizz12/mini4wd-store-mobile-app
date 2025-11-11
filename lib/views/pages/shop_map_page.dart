@@ -29,17 +29,6 @@ class _ShopMapPageState extends State<ShopMapPage> {
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: 20),
-          Obx(() {
-            final pos = _locationController.location.value;
-            final msg = _locationController.statusMessage.value;
-
-            if (pos == null) {
-              return Text(msg.isEmpty ? "Getting Location..." : msg);
-            }
-
-            return LocationInfo(pos: pos, msg: msg);
-          }),
-
           // Map
           Obx(() {
             final pos = _locationController.location.value;
@@ -82,7 +71,7 @@ class _ShopMapPageState extends State<ShopMapPage> {
                     size: 35,
                   ),
                 );
-              }).toList(),
+              }),
             ];
 
             return Container(
@@ -105,6 +94,17 @@ class _ShopMapPageState extends State<ShopMapPage> {
                 ),
               ),
             );
+          }),
+
+          Obx(() {
+            final pos = _locationController.location.value;
+            final msg = _locationController.statusMessage.value;
+
+            if (pos == null) {
+              return Text(msg.isEmpty ? "Getting Location..." : msg);
+            }
+
+            return LocationInfo(pos: pos, msg: msg);
           }),
 
           Expanded(

@@ -12,10 +12,10 @@ class LoginView extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green,
       appBar: AppBar(
         title: Text("Mini Dash"),
       ),
@@ -23,6 +23,7 @@ class LoginView extends StatelessWidget {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(10),
           child: Card(
+            color: Colors.pink,
             child: Padding(
               padding: EdgeInsets.all(20),
               child: Column(
@@ -35,12 +36,15 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20),
+                  // email
                   TextFormField(
                     controller: _emailController,
                     maxLength: 60,
                     decoration: InputDecoration(hint: Text("Email")),
                   ),
                   SizedBox(height: 10),
+
+                  // password
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
@@ -52,6 +56,9 @@ class LoginView extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.amberAccent
+                      ),
                       onPressed: () async {
                         if (_emailController.text.isEmpty ||
                             _passwordController.text.isEmpty) {

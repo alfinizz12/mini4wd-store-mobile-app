@@ -35,7 +35,7 @@ class PreferencesView extends StatelessWidget {
                       items: timezoneController.availableTimezones
                           .map((zone) => DropdownMenuItem(
                                 value: zone,
-                                child: Text(zone),
+                                child: Text(zone, textAlign: TextAlign.end,),
                               ))
                           .toList(),
                       onChanged: (value) {
