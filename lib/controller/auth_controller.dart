@@ -72,7 +72,7 @@ class AuthController extends GetxController {
 
     if (response != null) {
       Get.snackbar(
-        "Failed",
+        "Failed Register",
         response,
         backgroundColor: Colors.red,
         colorText: Colors.white,
